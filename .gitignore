@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/image-restorer/imageRemovedPixels.pgm
+/image-restorer/imageRestoredPixels.pgm
+/image-restorer/me.pgm
+*.pgm
+/image-restorer/circle.pgm
+/image-restorer/c2.pgm
