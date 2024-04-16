@@ -6,7 +6,7 @@ using namespace Eigen;
 Image::Image(string filename) :removed(), restored() {
 	std::cout << "Loading image...\n";
 
-	ifstream file("../images/in/" + filename);
+	ifstream file("images/in/" + filename);
 	if (!file) {
 		throw runtime_error("Unable to open file in Image constructor");
 	}
@@ -68,7 +68,7 @@ void Image::saveRemoved() {
 		throw runtime_error("Removed image cannot be empty");
 	}
 
-	ofstream file("../images/out/imageRemovedPixels.pgm");
+	ofstream file("images/out/imageRemovedPixels.pgm");
 	if (!file) {
 		throw runtime_error("Unable to open file in saveRemoved");
 	}
@@ -141,7 +141,7 @@ void Image::saveRestored() {
 		throw runtime_error("Restored image cannot be empty");
 	}
 
-	ofstream file("../images/out/imageRestoredPixels.pgm");
+	ofstream file("images/out/imageRestoredPixels.pgm");
 	if (!file) {
 		throw runtime_error("Unable to open file in saveRestored");
 	}

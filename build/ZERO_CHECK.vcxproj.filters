@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\cyfra\Desktop\School\year_2\semester_4\partial-differential-equations\image-restorer\build\CMakeFiles\4889492737ac8b5e9c173bc0cacbae38\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{1558501A-384E-3971-984F-1FDA19AF7A70}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
