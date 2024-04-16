@@ -1,9 +1,11 @@
 #include "Image.h"
+#include <iomanip>
 
-using namespace std;
 using namespace Eigen;
 
 Image::Image(string filename) :removed(), restored() {
+	std::cout << "Loading image...\n";
+
 	ifstream file(filename);
 	if (!file) {
 		throw runtime_error("Unable to open file in Image constructor");
@@ -28,25 +30,32 @@ Image::Image(string filename) :removed(), restored() {
 	}
 
 	file.close();
+
+	std::cout << "Image loaded, dimensions: " << width << "x" << height << std::endl;
 }
 
-void Image::remove(int percent) {
+void Image::remove(size_t percent) {
+	std::cout << "Removing " << percent << "%...\n";
+
 	if (width <= 2 || height <= 2) {
 		throw runtime_error("Image width and height must be greater than 2");
+	}
+	else if(width > numeric_limits<int>::max() || height > numeric_limits<int>::max()) {
+		throw runtime_error("Image dimensions are too large");
 	}
 
 	removed = original;
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_int_distribution<> X(1, width - 2);
-	uniform_int_distribution<> Y(1, height- 2);
+	uniform_int_distribution<> X(1, static_cast<int>(width - 2));
+	uniform_int_distribution<> Y(1, static_cast<int>(height - 2));
 
-	int n = static_cast<int>((width - 2) * (height - 2) * percent / 100);
+	size_t n = static_cast<size_t>((width - 2) * (height - 2) * percent / 100);
 
-	for (int i = 0; i < n; i++) {
+	for (size_t i = 0; i < n; i++) {
 		int& pixel = removed[width * Y(gen) + X(gen)];
 
-		if (pixel == max_val) {
+		if (pixel == 0) {
 			i--;
 			continue;
 		}
@@ -72,15 +81,18 @@ void Image::saveRemoved() {
 }
 
 void Image::restore() {
-	int size = width * height;
-	SparseMatrix<double> m(size, size);
+	std::cout << "\nImage restoration started\n";
+	std::cout << "Creating sparse matrix...\n";
+	size_t size = width * height;
+	SparseMatrix<double, RowMajor> m(size, size);
+	m.reserve(5 * size);
 	
-	for (int i = 0; i < size; i++) {
+	for (size_t i = 0; i < size; i++) {
 		if (removed[i] == 0) {
 			m.insert(i, i) = 4.;
 
 			if (i - 1 >= 0) {
-				m.insert(i, i - 1) = -1.;
+				m.insert(i , i - 1) = -1.;
 			}
 			if (i + 1 < size) {
 				m.insert(i, i + 1) = -1.;
@@ -95,25 +107,36 @@ void Image::restore() {
 		else {
 			m.insert(i, i) = 1.;
 		}
+
+		double progress = static_cast<double>(i + 1) / size * 100;
+		ostringstream oss;
+		oss << fixed << setprecision(2) << progress << "%";
+		printf("\33[2K\r%s", oss.str().c_str());
 	}
 
-	BiCGSTAB<SparseMatrix<double>, IncompleteLUT<double>> solver;
+	initParallel();
+	int n = 8;
+	omp_set_num_threads(n);
+	setNbThreads(n);
+	
+	BiCGSTAB <SparseMatrix<double,RowMajor>> solver;
+	std::cout << "\nComputing BiCGSTAB...\n";
+	solver.setMaxIterations(100000);
+	solver.setTolerance(1E-8);
 	solver.compute(m);
-	if (solver.info() != Eigen::Success) {
-		cout << "BiCGSTAB failed. \n";
-		return;
-	}
 
+	std::cout << "Solving...\n";
 	VectorXd removed_d = removed.cast<double>();
 	VectorXd restored_d = solver.solve(removed_d);
-	if (solver.info() != Eigen::Success) {
-		std::cout << "Solving failed. \n";
-		return;
-	}
+
+	std::cout << "# Iterations:	" << solver.iterations() << std::endl;
+	std::cout << "Estimated error: " << solver.error() << std::endl;
 
 	restored = restored_d.cast<int>();
 }
 void Image::saveRestored() {
+	std::cout << "\nSaving restored image...";
+
 	if (restored.size() == 0) {
 		throw runtime_error("Restored image cannot be empty");
 	}

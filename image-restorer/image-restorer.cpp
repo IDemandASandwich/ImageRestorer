@@ -3,8 +3,8 @@
 int main(void)
 {
 	try {
-		Image image("me.pgm");
-		image.remove(30);
+		Image image("meLarge.pgm");
+		image.remove(99);
 		image.saveRemoved();
 		image.restore();
 		image.saveRestored();

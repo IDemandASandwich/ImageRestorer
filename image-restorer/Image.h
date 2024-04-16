@@ -5,6 +5,8 @@
 #include <random>
 #include <Eigen/Sparse>
 #include <Eigen/IterativeLinearSolvers>
+#include <Eigen/Core>
+#include <omp.h>
 
 using namespace std;
 using namespace Eigen;
@@ -15,13 +17,13 @@ private:
 	VectorXi original;
 	VectorXi removed;
 	VectorXi restored;
-	int width;
-	int height;
-	int max_val;
+	size_t width;
+	size_t height;
+	size_t max_val;
 
 public:
 	Image(string filename);
-	void remove(int percent);
+	void remove(size_t percent);
 	void saveRemoved();
 	void restore();
 	void saveRestored();
