@@ -367,3 +367,5 @@ FodyWeavers.xsd
 *.pgm
 /image-restorer/circle.pgm
 /image-restorer/c2.pgm
+/build/
+build/
