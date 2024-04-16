@@ -3,7 +3,7 @@
 int main(void)
 {
 	try {
-		Image image("meLarge.pgm");
+		Image image("meMedium.pgm");
 		image.remove(99);
 		image.saveRemoved();
 		image.restore();
