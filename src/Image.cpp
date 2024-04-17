@@ -88,7 +88,7 @@ void Image::restore() {
 	m.reserve(5 * size);
 	
 	for (size_t i = 0; i < size; i++) {
-		if (removed[i] == 0) {
+		if (removed(i) == 0) {
 			m.insert(i, i) = 4.;
 
 			if (i - 1 >= 0) {
@@ -114,10 +114,10 @@ void Image::restore() {
 		printf("\33[2K\r%s", oss.str().c_str());
 	}
 
-	initParallel();
+	Eigen::initParallel();
 	int n = 8;
 	omp_set_num_threads(n);
-	setNbThreads(n);
+	Eigen::setNbThreads(n);
 	
 	BiCGSTAB <SparseMatrix<double,RowMajor>> solver;
 	std::cout << "\nComputing BiCGSTAB...\n";

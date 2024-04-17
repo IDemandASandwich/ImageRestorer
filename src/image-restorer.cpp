@@ -3,8 +3,8 @@
 int main(void)
 {
 	try {
-		Image image("meMedium.pgm");	// change to your photo
-		image.remove(99);				// how many % of pixels to remove
+		Image image("meLarge.pgm");		// change to your photo
+		image.remove(90);				// how many % of pixels to remove
 		image.saveRemoved();
 		image.restore();
 		image.saveRestored();
