@@ -1,8 +1,6 @@
 #include "Image.h"
 #include <iomanip>
 
-using namespace Eigen;
-
 Image::Image(string filename) :removed(), restored() {
 	std::cout << "Loading image...\n";
 
