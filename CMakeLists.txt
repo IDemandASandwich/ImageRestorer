@@ -9,7 +9,7 @@ if (MSVC)
     add_definitions( "/D_CRT_SECURE_NO_WARNINGS /MP /openmp" )
 endif(MSVC)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/eigen)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs)
 
 file(GLOB H_FILES src/*.h)
 file(GLOB CPP_FILES src/*.cpp)
